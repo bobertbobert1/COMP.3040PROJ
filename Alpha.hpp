@@ -7,7 +7,8 @@
 class Alpha
 {
 	public:
-		void insert (Char c);
+		void insert(Char c);
+		int size();
 		
 		Char operator[](int v);
 		std::ostream& operator<<(std::ostream& output, const Alpha& aobj);

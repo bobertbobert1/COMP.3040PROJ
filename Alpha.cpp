@@ -8,6 +8,12 @@ void Alpha::insert(Char c)
 	chars.insert(c);
 }
 
+//Returns the current size of the alphabet
+int Alpha::size()
+{
+	return chars.size();
+}
+
 //Returns first character
 Char Alpha::operator[](int v)
 {
