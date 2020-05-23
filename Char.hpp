@@ -16,6 +16,6 @@ class Char
 	//Maybe use int value as a place holder for characters?
 	private:
 		int c;
-}
+};
 
 #endif

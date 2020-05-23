@@ -18,6 +18,6 @@ class Str
 	private:
 		Alpha aobj;
 		std::vector<Char> chars;
-}
+};
 
 #endif

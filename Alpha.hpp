@@ -18,6 +18,5 @@ class Alpha
 		
 	private:
 		std::set<Char> chars;
-}
-
+};
 #endif
