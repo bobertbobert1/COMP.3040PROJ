@@ -22,6 +22,8 @@ int main(void)
 	cout << first << " " << second << "0/n";
 	cout << bet << "/n";
 	cout << s << "/n" ;
+	bet.lex(0);
+	let.lex(1);
 	
 	return 0;
 }
