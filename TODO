@@ -1,7 +1,7 @@
 DONE Decide on a data type to represent alphabets and characters.
-Decide on a data type to represent strings.
-Write a function that generates the Nth string of a given alphabet's lexicographic order.
-Define a data type to represent DFAs.
+DONE Decide on a data type to represent strings.
+DONE Write a function that generates the Nth string of a given alphabet's lexicographic order.
+DONE Define a data type to represent DFAs.
 Write the definition of a DFA that accepts no strings.
 Write the definition of a DFA that accepts only the empty string.
 Write a function that when given a character returns a DFA that accepts only strings of exactly that character.
