@@ -18,6 +18,39 @@ int main(void)
 	Str s(bet);
 	s.add(first);
 	
+	//Empty String DFA
+	DFA<int> es([](int qi) 
+	{ 
+		return qi == 0 || qi == 1; 
+	}, 0,
+    [](int qi, Character c) 
+	{
+        if (qi == 0) 
+		{
+            return 1;
+        } 
+		else 
+		{
+            return 0;
+        }
+    },
+    [](int qi) 
+	{ 
+		return qi == 0;
+	});
+	
+	//No Strings DFA
+	DFA<int> ns([](int qi)
+	{
+		return qi==0 || qi==1;
+	}, 0, [](int qi, Char cobj)
+	{
+		return 0;
+	}, [](int qi)
+	{
+		return qi==0;
+	});
+	
 	//Output
 	cout << first << " " << second << "0/n";
 	cout << bet << "/n";
