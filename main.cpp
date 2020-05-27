@@ -51,6 +51,31 @@ int main(void)
 		return qi==0;
 	});
 	
+	//Character DFA Function
+	DFA<int> cDFA (Char dc)
+	{
+		DFA<int> dfa([](int qi)
+		{
+			return qi==0 || qi==1 || qi==2;
+		},0,
+		[dc](int qi, Char c)
+		{
+			if(c==dc&&qi==0)
+			{
+				return 1;
+			}
+			else
+			{
+				return 2;
+			}
+		},
+		[](int qi)
+		{
+			return qi==1;
+		});
+		return dfa;
+	}
+	
 	//Output
 	cout << first << " " << second << "0/n";
 	cout << bet << "/n";
