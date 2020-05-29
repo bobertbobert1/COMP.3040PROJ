@@ -13,7 +13,7 @@ class Str
 			aobj = bet;
 		}
 		void add(Char cobj);
-		std::ostream& operator<<(std::ostream& output, Str& s);
+		friend std::ostream& operator<<(std::ostream& output, Str& s);
 		
 	private:
 		Alpha aobj;

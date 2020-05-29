@@ -14,7 +14,7 @@ class Alpha
 		Str lex(int x);
 		Char at(int x);
 		Char operator[](int v);
-		std::ostream& operator<<(std::ostream& output, const Alpha& aobj);
+		friend std::ostream& operator<<(std::ostream& output, const Alpha& aobj);
 		
 	private:
 		std::set<Char> chars;

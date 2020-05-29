@@ -1,7 +1,7 @@
 #include <iostream>
-#include <Alpha.hpp>
-#include <Char.hpp>
-#include <Str.hpp>
+#include "Alpha.hpp"
+#include "Char.hpp"
+#include "Str.hpp"
 
 //Test functions
 bool lexitest();
@@ -10,6 +10,7 @@ bool c1DFA();
 bool c2DFA();
 bool c3DFA();
 bool nS();
+template <typename T>
 bool successString(DFA<T> dfa, Str s);
 
 //Initialize the dictionary
@@ -220,6 +221,16 @@ int main(void)
 	}
 	bool nS()
 	{
+		DFA<int> ns([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0, [](int qi, Char cobj)
+		{
+			return 0;
+		}, [](int qi)
+		{
+			return qi==0;
+		});
 		ns.accepts(t1) == false ? pass++ : fail++;
 		ns.accepts(t2) == false ? pass++ : fail++;
 		ns.accepts(t3) == false ? pass++ : fail++;

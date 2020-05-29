@@ -1,6 +1,8 @@
 #ifndef CHAR_HPP
 #define CHAR_HPP
 
+#include <iostream>
+
 class Char 
 {
 	public:
@@ -9,10 +11,10 @@ class Char
 			c = x;
 		}
 	
-	std::ostream& operator<<(std::ostream& out, Char& x);
-	bool operator>(Char l, Char r);
-	bool operator<(Char l, Char r);
-	bool operator==(Char l, Char r);
+	friend std::ostream& operator<<(std::ostream& output, const Char& x);
+	friend bool operator>(Char l, Char r);
+	friend bool operator<(Char l, Char r);
+	friend bool operator==(Char l, Char r);
 	//Maybe use int value as a place holder for characters?
 	private:
 		int c;
