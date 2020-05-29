@@ -10,6 +10,7 @@ bool c1DFA();
 bool c2DFA();
 bool c3DFA();
 bool nS();
+bool successString(DFA<T> dfa, Str s);
 
 //Initialize the dictionary
 Alpha dictionary;
@@ -238,6 +239,65 @@ int main(void)
 		}
 		return fail==0;
 	}
+	
+	bool successString(DFA<T> dfa, Str s)
+	{
+		return dfa.accepts(s);
+	}
+	
+	successString(ns, t1) == false ? pass++ : fail++;
+	successString(ns, t2) == false ? pass++ : fail++;
+	successString(ns, t3) == false ? pass++ : fail++;
+	successString(ns, t4) == false ? pass++ : fail++;
+	successString(ns, t5) == false ? pass++ : fail++;
+	successString(ns, t6) == false ? pass++ : fail++;
+	successString(ns, t7) == false ? pass++ : fail++;
+	successString(ns, t8) == false ? pass++ : fail++;
+	successString(ns, t9) == false ? pass++ : fail++;
+	successString(ns, t10) == false ? pass++ : fail++;
+	successString(ns, t11) == false ? pass++ : fail++;
+	successString(ns, t12) == false ? pass++ : fail++;
+	successString(c1accept, t1) == true ? pass++ : fail++;
+	successString(c1accept, t2) == false ? pass++ : fail++;
+	successString(c1accept, t3) == false ? pass++ : fail++;
+	successString(c1accept, t4) == false ? pass++ : fail++;
+	successString(c1accept, t5) == false ? pass++ : fail++;
+	successString(c1accept, t6) == false ? pass++ : fail++;
+	successString(c1accept, t7) == false ? pass++ : fail++;
+	successString(c1accept, t8) == false ? pass++ : fail++;
+	successString(c1accept, t9) == false ? pass++ : fail++;
+	successString(c1accept, t10) == false ? pass++ : fail++;
+	successString(c1accept, t11) == false ? pass++ : fail++;
+	successString(c1accept, t12) == false ? pass++ : fail++;
+	successString(c2accept, t1) == false ? pass++ : fail++;
+	successString(c2accept, t2) == true ? pass++ : fail++;
+	successString(c2accept, t3) == false ? pass++ : fail++;
+	successString(c2accept, t4) == false ? pass++ : fail++;
+	successString(c2accept, t5) == false ? pass++ : fail++;
+	successString(c2accept, t6) == false ? pass++ : fail++;
+	successString(c2accept, t7) == false ? pass++ : fail++;
+	successString(c2accept, t8) == false ? pass++ : fail++;
+	successString(c2accept, t9) == false ? pass++ : fail++;
+	successString(c2accept, t10) == false ? pass++ : fail++;
+	successString(c2accept, t11) == false ? pass++ : fail++;
+	successString(c2accept, t12) == false ? pass++ : fail++;
+	successString(c3accept, t1) == false ? pass++ : fail++;
+	successString(c3accept, t2) == false ? pass++ : fail++;
+	successString(c3accept, t3) == true ? pass++ : fail++;
+	successString(c3accept, t4) == false ? pass++ : fail++;
+	successString(c3accept, t5) == false ? pass++ : fail++;
+	successString(c3accept, t6) == false ? pass++ : fail++;
+	successString(c3accept, t7) == false ? pass++ : fail++;
+	successString(c3accept, t8) == false ? pass++ : fail++;
+	successString(c3accept, t9) == false ? pass++ : fail++;
+	successString(c3accept, t10) == false ? pass++ : fail++;
+	successString(c3accept, t11) == false ? pass++ : fail++;
+	successString(c3accept, t12) == false ? pass++ : fail++;
+	if(fail >0)
+	{
+		cout << "Task 10 function had 1 or more failed functions!/n";
+	}
+	
 	return 0;
 }
 
