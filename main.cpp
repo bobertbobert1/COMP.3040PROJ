@@ -2,6 +2,7 @@
 #include "Alpha.hpp"
 #include "Char.hpp"
 #include "Str.hpp"
+#include "DFA.hpp"
 
 //Test functions
 bool lexitest();
@@ -12,6 +13,7 @@ bool c3DFA();
 bool nS();
 template <typename T>
 bool successString(DFA<T> dfa, Str s);
+bool statestest();
 
 //Initialize the dictionary
 Alpha dictionary;
@@ -254,6 +256,35 @@ int main(void)
 	bool successString(DFA<T> dfa, Str s)
 	{
 		return dfa.accepts(s);
+	}
+	
+	bool statestest()
+	{
+		int pass = 0;
+		int fail = 0;
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
+		
+		vector<<pair<int, Char>> statelist = eNumaccept.acceptsandstates(t1);
+		
+		return true;
 	}
 	
 	successString(ns, t1) == false ? pass++ : fail++;
