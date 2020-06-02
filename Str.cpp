@@ -43,6 +43,19 @@ Char String::first()
 	}
 }
 
+//Removes the last character from a given string
+void Str::pop_back()
+{
+	if(chars.size() > 0)
+	{
+		chars.pop_back();
+	}
+	else
+	{
+		throw "String is too small to execute pop_back";
+	}
+}
+
 ostream& operator<<(ostream& output, Str& s)
 {
 	for(int i=0;i<s.chars.size();i++)

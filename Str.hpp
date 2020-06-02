@@ -13,6 +13,7 @@ class Str
 			aobj = bet;
 		}
 		void add(Char cobj);
+		void pop_back();
 		friend std::ostream& operator<<(std::ostream& output, Str& s);
 		
 	private:

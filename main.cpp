@@ -14,6 +14,7 @@ bool nS();
 template <typename T>
 bool successString(DFA<T> dfa, Str s);
 bool statestest();
+bool stringfindtest();
 
 //Initialize the dictionary
 Alpha dictionary;
@@ -281,12 +282,57 @@ int main(void)
 		{
 			return qi==0;
 		});
-		
+
 		vector<<pair<int, Char>> statelist = eNumaccept.acceptsandstates(t1);
-		
+
 		return true;
 	}
 	
+	bool stringfindtest ()
+	{
+		int pass = 0;
+		int fail = 0;
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
+		
+		Str strong = findstr(eNumaccept, dictionary);
+		Str ans(dictionary);
+		if(strong.length()==ans.length())
+		{
+			for(int i=0; i<strong.length(); i++)
+			{
+				if(strong[i]!=ans[i])
+				{
+					fail++;
+					break;
+				}
+			}
+			
+			if(fail!=0)
+			{
+				cout << "Oh no the findstr test failed!/n";
+			}
+			return fail==0;
+		}
+		
+	}
 	successString(ns, t1) == false ? pass++ : fail++;
 	successString(ns, t2) == false ? pass++ : fail++;
 	successString(ns, t3) == false ? pass++ : fail++;

@@ -5,9 +5,11 @@
 #include "Char.hpp"
 #include "Alpha.hpp"
 #include <functional>
+#include <algorithm>
 #include <utility>
 #include <vector>
-
+#include <iostream>
+using namespace std;
 template <class State>
 class DFA
 {
@@ -24,7 +26,7 @@ class DFA
 		
 		DFA(std::function<bool(State)> Q, State q0, std::function<State(State, Char)> delta, std::function<bool(State)> F) :Q(Q), q0(q0), delta(delta), F(F) {};
 		
-		bool accepts(Str s)
+		bool checks(Str s)
 		{
 			int len = s.length();
 			State qi = q0;
@@ -35,23 +37,49 @@ class DFA
 			}
 			return F(qi);
 		}
-		
-		//Goes through the same process as the accepts function but also grabs every state along the way
-		vector<pair<State, Char>> acceptsandstates(Str s)
+		Str findstr(Alpha bet)
 		{
-			vector<pair<State, Char>> states;
-			int len = s.length();
+			Str strong(bet);
+			vector<State> passed;
 			State qi = q0;
-			int i = 0;
-			while(i < len)
-			{
-				qi = delta(qi, s[i]);
-				states.push_back(pair<State  Char>(qi, s[i]));
-				i++;
-			}
-			return states;
+			return searchin(vector<State> passed, State qi, Str strong, Alpha bet);
 		}
+			
 	private:
-		
+		Str searchalg(vector <State> passed, State qi, Str strong, Alpha bet)
+		{
+			typename vector<State>::iterator run;
+			run = find(passed.begin(), passed.end(), qi);
+			if(run != passed.end())
+			{
+				strong.pop_back();
+				return strong;
+			}
+			
+			else if(F(qi))
+			{
+				return strong;
+			}
+			
+			else
+			{
+				passed.push_back(qi);
+				Str strong2(bet);
+				for(int i=0; i<bet.size(); i++)
+				{
+					State qnext = delta(qi, bet[i]);
+					Str strong3 = strong;
+					strong3.add(bet[i]);
+					passed.push_back(qi);
+					strong2 = searchalg(passed, qnext, strong3, bet);
+					if(accepts(strong2))
+					{
+						break;
+					}
+				}
+				return strong2;
+			}
+			
+		}
 };
 #endif
