@@ -13,8 +13,13 @@ bool c3DFA();
 bool nS();
 template <typename T>
 bool successString(DFA<T> dfa, Str s);
+
+template <typename T>
+DFA<T> flippeddfa(DFA<T> dfa);
+
 bool statestest();
 bool stringfindtest();
+bool flippeddfatest();
 
 //Initialize the dictionary
 Alpha dictionary;
@@ -332,6 +337,52 @@ int main(void)
 			return fail==0;
 		}
 		
+	}
+	
+	bool flippeddfatest()
+	{
+		int pass = 0;
+		int fail = 0;
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
+		
+		DFA<int> oNumaccept = flippeddfa(eNumaccept);
+		oNumaccept.accepts(t1) == false ? pass++ : fail++;
+		oNumaccept.accepts(t2) == true ? pass++ : fail++;
+		oNumaccept.accepts(t3) == false ? pass++ : fail++;
+		oNumaccept.accepts(t4) == true ? pass++ : fail++;
+		oNumaccept.accepts(t5) == false ? pass++ : fail++;
+		oNumaccept.accepts(t6) == true ? pass++ : fail++;
+		oNumaccept.accepts(t7) == false ? pass++ : fail++;
+		oNumaccept.accepts(t8) == true ? pass++ : fail++;
+		oNumaccept.accepts(t9) == false ? pass++ : fail++;
+		oNumaccept.accepts(t10) == true ? pass++ : fail++;
+		oNumaccept.accepts(t11) == false ? pass++ : fail++;
+		oNumaccept.accepts(t12) == true ? pass++ : fail++;
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
 	}
 	successString(ns, t1) == false ? pass++ : fail++;
 	successString(ns, t2) == false ? pass++ : fail++;
