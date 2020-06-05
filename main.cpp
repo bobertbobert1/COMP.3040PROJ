@@ -17,6 +17,10 @@ bool successString(DFA<T> dfa, Str s);
 template <typename T>
 DFA<T> flippeddfa(DFA<T> dfa);
 
+template <typename T, typename TT>
+DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2);
+
+bool uniontest();
 bool statestest();
 bool stringfindtest();
 bool flippeddfatest();
@@ -339,6 +343,17 @@ int main(void)
 		
 	}
 	
+	template <typename T>
+	DFA<T> flippeddfa(DFA<T> dfa)
+	{
+		function<bool(T)> flipee = [dfa](T qi)
+		{
+			return !dfa.F(qi);
+		};
+		DFA<T> flipped(dfa.Q, dfa, q0, dfa.delta, flipee);
+		return flipped;
+	}
+	
 	bool flippeddfatest()
 	{
 		int pass = 0;
@@ -363,6 +378,7 @@ int main(void)
 			return qi==0;
 		});
 		
+		
 		DFA<int> oNumaccept = flippeddfa(eNumaccept);
 		oNumaccept.accepts(t1) == false ? pass++ : fail++;
 		oNumaccept.accepts(t2) == true ? pass++ : fail++;
@@ -383,6 +399,34 @@ int main(void)
 		}
 		
 		return fail==0;
+	}
+	
+	bool uniontest()
+	{
+		
+	}
+	
+	template <typename T, typename TT>
+	DFA<pair<TT, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
+	{
+		function<bool(pair<T, TT>)> Q = [d1, d2](pair<T, TT> qi) 
+		{
+			return d1.Q(qi.first) || d2.Q(qi.second);
+		};
+		pair<T, TT> q0(d1.q0, d2.q0);
+		function<pair<T, TT>(pair<T, TT>, Char)> delta =[d1, d2](pair<T, TT> qi, Char cobj) 
+		{
+			T qi1 = d1.delta(qi.first, cobj);
+			TT qi2 = d2.delta(qi.second, cobj);
+			pair<T, TT> finalpair(qi1, qi2);
+			return finalrepair;
+		};
+		function<bool(pair<T, TT>)> F = [d1, d2](pair<T, TT> qi) 
+		{
+			return d1.F(qi.first) || d2.F(qi.second);
+		};
+		DFA<pair<T1, T2>> finaldfa(Q, q0, delta, F);
+		return finaldfa;
 	}
 	successString(ns, t1) == false ? pass++ : fail++;
 	successString(ns, t2) == false ? pass++ : fail++;

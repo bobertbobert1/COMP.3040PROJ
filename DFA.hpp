@@ -37,12 +37,13 @@ class DFA
 			}
 			return F(qi);
 		}
+		
 		Str findstr(Alpha bet)
 		{
 			Str strong(bet);
 			vector<State> passed;
 			State qi = q0;
-			return searchin(vector<State> passed, State qi, Str strong, Alpha bet);
+			return searchalg(vector<State> passed, State qi, Str strong, Alpha bet);
 		}
 			
 	private:
