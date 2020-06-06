@@ -403,7 +403,45 @@ int main(void)
 	
 	bool uniontest()
 	{
+		int pass = 0;
+		int fail = 0;
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
 		
+		DFA<int> c2accept = cDFA(b);
+		
+		DFA<pair<int, int>> eNumand2accept = uniondfa(eNumaccept,c2accept);
+		
+		eNumand2accept.accepts(t1) == true ? pass++ : fail++;
+		eNumand2accept.accepts(t2) == true ? pass++ : fail++;
+		eNumand2accept.accepts(t3) == false ? pass++ : fail++;
+		eNumand2accept.accepts(t4) == true ? pass++ : fail++;
+		eNumand2accept.accepts(t5) == false ? pass++ : fail++;
+		eNumand2accept.accepts(t6) == true ? pass++ : fail++;
+		eNumand2accept.accepts(t7) == false ? pass++ : fail++;
+		eNumand2accept.accepts(t8) == true ? pass++ : fail++;
+		eNumand2accept.accepts(t9) == false ? pass++ : fail++;
+		eNumand2accept.accepts(t10) == true ? pass++ : fail++;
+		eNumand2accept.accepts(t11) == false ? pass++ : fail++;
+		eNumand2accept.accepts(t12) == true ? pass++ : fail++;
+			
 	}
 	
 	template <typename T, typename TT>
