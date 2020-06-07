@@ -20,6 +20,10 @@ DFA<T> flippeddfa(DFA<T> dfa);
 template <typename T, typename TT>
 DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2);
 
+template <typename T, typename TT>
+DFA<pair<T, TT>> intersectdfa(DFA<T> d1, DFA<TT> d2);
+
+bool intersecttest();
 bool uniontest();
 bool statestest();
 bool stringfindtest();
@@ -441,11 +445,67 @@ int main(void)
 		eNumand2accept.accepts(t10) == true ? pass++ : fail++;
 		eNumand2accept.accepts(t11) == false ? pass++ : fail++;
 		eNumand2accept.accepts(t12) == true ? pass++ : fail++;
-			
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
+		
+	}
+	
+	bool intersecttest()
+	{
+		int pass = 0;
+		int fail = 0;
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
+		
+		DFA<int> c1accept = cDFA(a);
+		
+		DFA<pair<int, int>> only1accept = intersectdfa(eNumaccept,c1accept);
+		
+		only1accept.accepts(t1) == true ? pass++ : fail++;
+		only1accept.accepts(t2) == false ? pass++ : fail++;
+		only1accept.accepts(t3) == false ? pass++ : fail++;
+		only1accept.accepts(t4) == false ? pass++ : fail++;
+		only1accept.accepts(t5) == false ? pass++ : fail++;
+		only1accept.accepts(t6) == false ? pass++ : fail++;
+		only1accept.accepts(t7) == false ? pass++ : fail++;
+		only1accept.accepts(t8) == false ? pass++ : fail++;
+		only1accept.accepts(t9) == false ? pass++ : fail++;
+		only1accept.accepts(t10) == false ? pass++ : fail++;
+		only1accept.accepts(t11) == false ? pass++ : fail++;
+		only1accept.accepts(t12) == false ? pass++ : fail++;
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
 	}
 	
 	template <typename T, typename TT>
-	DFA<pair<TT, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
+	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
 	{
 		function<bool(pair<T, TT>)> Q = [d1, d2](pair<T, TT> qi) 
 		{
@@ -464,6 +524,29 @@ int main(void)
 			return d1.F(qi.first) || d2.F(qi.second);
 		};
 		DFA<pair<T1, T2>> finaldfa(Q, q0, delta, F);
+		return finaldfa;
+	}
+	
+	template <typename T, typename TT>
+	DFA<pair<T, TT> intersectdfa(DFA<T> d1, DFA<TT> d2)
+	{
+		function<bool(pair<T,TT>)> Q = [d1, d2](pair<T,TT> qi)
+		{
+			return d1.Q(qi.first) || d2.Q(qi,second);
+		}
+		pair<T,TT> q0(d1.q0,d2.q0);
+		function<pair<T,TT>(pair<T,TT>,Char)> delta = [d1,d2](pair<T,TT> qi, Char cobj)
+		{
+			T qi1 = d1.delta(qi.first, cobj);
+			TT qi2 = d2.delta(qi.second, cobj);
+			pair<T, TT> finaldfa(qi1, qi2);
+			return finaldfa;
+		};
+		function<bool(pair<T,TT>)> F = [d1,d2](pair<T,TT> qi)
+		{
+			return d1.F(qi.first) && d2.F(qi.second);
+		};
+		DFA<pair<T,TT>> finaldfa(Q, q0, delta, F);
 		return finaldfa;
 	}
 	successString(ns, t1) == false ? pass++ : fail++;
