@@ -545,6 +545,10 @@ int main(void)
 		subsetdfa(oNumaccept,Aaccept,dictionary) == true ? pass++ : fail++;
 		subsetdfa(eNumaccept,Aaccept,dictionary) == false ? pass++ : fail++;
 		subsetdfa(oNumaccept,Baccept,dictionary) == false ? pass++ : fail++;
+		subsetdfa(Aaccept,oNumaccept,dictionary) == false ? pass++ : fail++;
+		subsetdfa(Baccept,oNumaccept,dictionary) == false ? pass++ : fail++;
+		subsetdfa(Aaccept,eNumaccept,dictionary) == false ? pass++ : fail++;
+		subsetdfa(Baccept,eNumaccept,dictionary) == false ? pass++ : fail++;
 	}
 	
 	template <typename T, typename TT>
