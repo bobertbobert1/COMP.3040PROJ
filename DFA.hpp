@@ -65,22 +65,20 @@ class DFA
 			else
 			{
 				passed.push_back(qi);
-				Str strong2(bet);
 				for(int i=0; i<bet.size(); i++)
 				{
-					State qnext = delta(qi, bet[i]);
 					Str strong3 = strong;
 					strong3.add(bet[i]);
-					passed.push_back(qi);
-					strong2 = searchalg(passed, qnext, strong3, bet);
-					if(accepts(strong2))
+					State qnext = delta(qi, bet[i]);
+					String strong2 = searchalg(passed, qnext, strong3, bet);
+					if(!strong2.failed())
 					{
-						break;
+						return strong2;
 					}
 				}
-				return strong2;
 			}
-			
+			strong.setfail();
+			return strong;
 		}
 };
 #endif
