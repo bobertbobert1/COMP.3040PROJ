@@ -15,10 +15,10 @@ DONE (Union) Write a function that takes two DFAs and returns a third DFA that a
 DONE Write a dozen tests for your union function.
 DONE (Intersect) Write a function that takes two DFAs and returns a third DFA that accepts a string if both arguments accepts it.
 DONE Write a dozen tests for your intersection function.
-(Subset) Write a function which takes two DFAs (X and Y) and returns whether every string accepted by X is also accepted by Y.
-Write a dozen tests for your subset function.
-(Equality) Write a function which takes two DFAs (X and Y) and returns whether every string accepted by X is also accepted by Y and vice versa.
-Write a dozen tests for your equality function.
+DONE (Subset) Write a function which takes two DFAs (X and Y) and returns whether every string accepted by X is also accepted by Y.
+DONE Write a dozen tests for your subset function.
+DONE (Equality) Write a function which takes two DFAs (X and Y) and returns whether every string accepted by X is also accepted by Y and vice versa.
+DONE Write a dozen tests for your equality function.
 Verify your complement, union, and intersect functions using the equality function.
 Define a data type to represent NFAs.
 Write a (trivial) function that converts DFAs into NFAs.
