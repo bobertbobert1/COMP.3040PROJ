@@ -26,7 +26,10 @@ DFA<pair<T, TT>> intersectdfa(DFA<T> d1, DFA<TT> d2);
 template <typename T, typename TT>
 bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet);
 
+template <typename T, typename TT>
+bool equalitydfa(DFA<T> d1, DFA<TT>,d2, Alpha bet);
 
+bool equalitytest();
 bool subsettest();
 bool intersecttest();
 bool uniontest();
@@ -549,8 +552,81 @@ int main(void)
 		subsetdfa(Baccept,oNumaccept,dictionary) == false ? pass++ : fail++;
 		subsetdfa(Aaccept,eNumaccept,dictionary) == false ? pass++ : fail++;
 		subsetdfa(Baccept,eNumaccept,dictionary) == false ? pass++ : fail++;
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
 	}
 	
+	bool equalitytest()
+	{
+		int pass = 0;
+		int fail = 0;
+		DFA<int> Aaccept = cDFA(a);
+		DFA<int> Baccept = cDFA(b);
+		DFA<int> A2accept = cDFA(a);
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
+		DFA<int> oNumaccept = flippeddfa(eNumaccept);
+		
+		intersectdfa(Aaccept,Baccept,dictionary) == false ? pass++ : fail++;
+		intersectdfa(Aaccept,A2accept,dictionary) == true ? pass++ : fail++;
+		intersectdfa(eNumaccept,oNumaccept,dictionary) == false ? pass++ : fail++;
+		intersectdfa(Aaccept,eNumaccept,dictionary) == false ? pass++ : fail++;
+		intersectdfa(oNumaccept,Baccept,dictionary) == false ? pass++ : fail++;
+		intersectdfa(Baccept,A2accept,dictionary) == false ? pass++ : fail++;
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
+	}
+	template <typename T, typename TT>
+	bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+	{
+		DFA<TT> flippedd2 = flippeddfa(d2);
+		DFA<pair<T,TT>> intersectdfa1 = intersectdfa(d1, flippedd2);
+		
+		DFA<T> flippedd1 = flippeddfa(d1);
+		DFA<pair<TT, T>> intersectdfa2 = intersectdfa(d2, flippedd1);
+		
+		String ans1 = findstr(intersectdfa1, bet);
+		String ans2 = findstr(intersectdfa2, bet);
+		
+		if(ans1.failed())
+		{
+			return true;
+		}
+		
+		if(ans2.failed())
+		{
+			return true;
+		}
+		
+		return false;
+	}
 	template <typename T, typename TT>
 	bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
 	{
@@ -563,6 +639,7 @@ int main(void)
 		}
 		return false;
 	}
+	
 	template <typename T, typename TT>
 	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
 	{
