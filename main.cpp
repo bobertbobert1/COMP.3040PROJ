@@ -568,6 +568,8 @@ int main(void)
 		DFA<int> Aaccept = cDFA(a);
 		DFA<int> Baccept = cDFA(b);
 		DFA<int> A2accept = cDFA(a);
+		DFA<pair<int, int>> only1accept = intersectdfa(eNumaccept,Baccept);
+		DFA<pair<int, int>> eNumand2accept = uniondfa(eNumaccept,Baccept);
 		DFA<int> eNumaccept([](int qi)
 		{
 			return qi==0 || qi==1;
@@ -589,12 +591,15 @@ int main(void)
 		});
 		DFA<int> oNumaccept = flippeddfa(eNumaccept);
 		
-		intersectdfa(Aaccept,Baccept,dictionary) == false ? pass++ : fail++;
-		intersectdfa(Aaccept,A2accept,dictionary) == true ? pass++ : fail++;
-		intersectdfa(eNumaccept,oNumaccept,dictionary) == false ? pass++ : fail++;
-		intersectdfa(Aaccept,eNumaccept,dictionary) == false ? pass++ : fail++;
-		intersectdfa(oNumaccept,Baccept,dictionary) == false ? pass++ : fail++;
-		intersectdfa(Baccept,A2accept,dictionary) == false ? pass++ : fail++;
+		subsetdfa(Aaccept,Baccept,dictionary) == false ? pass++ : fail++;
+		equalitydfa(Aaccept,Baccept,dictionary) == false ? pass++ : fail++;	
+		equalitydfa(Aaccept,A2accept,dictionary) == true ? pass++ : fail++;
+		subsetdfa(Aaccept,A2accept,dictionary) == true ? pass++ : fail++;
+		equalitydfa(eNumaccept,oNumaccept,dictionary) == false ? pass++ : fail++;
+		equalitydfa(eNumand2accept,eNumaccept,dictionary) == false ? pass++ : fail++;
+		equalitydfa(only1accept,Baccept,dictionary) == false ? pass++ : fail++;
+		equalitydfa(Baccept,A2accept,dictionary) == false ? pass++ : fail++;
+		
 		
 		if(fail > 0)
 		{
