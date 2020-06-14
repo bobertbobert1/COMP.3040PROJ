@@ -37,6 +37,8 @@ bool statestest();
 bool stringfindtest();
 bool flippeddfatest();
 
+bool nfatest();
+
 //Initialize the dictionary
 Alpha dictionary;
 Char a(1);
@@ -645,6 +647,38 @@ int main(void)
 		return false;
 	}
 	
+	bool nfatest()
+	{
+		DFA<int> Aaccept = cDFA(a);
+		DFA<int> Baccept = cDFA(b);
+		DFA<int> eNumaccept([](int qi)
+		{
+			return qi==0 || qi==1;
+		}, 0,
+		[](int qi, Char c)
+		{
+			if(c==a)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
+		},
+		[](int qi)
+		{
+			return qi==0;
+		});
+		DFA<pair<int, int>> only1accept = intersectdfa(eNumaccept,Baccept);
+		DFA<pair<int, int>> eNumand2accept = uniondfa(eNumaccept,Baccept);
+		DFA<int> oNumaccept = flippeddfa(eNumaccept);
+		
+		
+		
+		
+		
+	}
 	template <typename T, typename TT>
 	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
 	{
