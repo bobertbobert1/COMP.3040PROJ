@@ -19,9 +19,9 @@ DONE (Subset) Write a function which takes two DFAs (X and Y) and returns whethe
 DONE Write a dozen tests for your subset function.
 DONE (Equality) Write a function which takes two DFAs (X and Y) and returns whether every string accepted by X is also accepted by Y and vice versa.
 DONE Write a dozen tests for your equality function.
-Verify your complement, union, and intersect functions using the equality function.
-Define a data type to represent NFAs.
-Write a (trivial) function that converts DFAs into NFAs.
+DONE Verify your complement, union, and intersect functions using the equality function.
+DONE Define a data type to represent NFAs.
+DONE Write a (trivial) function that converts DFAs into NFAs.
 Write a dozen example NFAs.
 For each example NFA, write a dozen traces of their behavior.
 (Oracle) Write a function that given an NFA, a string, a trace, and a boolean, determines if the trace is a valid execution of the NFA and accepts results in the given boolean.
