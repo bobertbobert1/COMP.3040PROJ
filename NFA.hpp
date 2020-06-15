@@ -12,7 +12,7 @@
 using namespace std;
 template <class State>
 
-class NFA_HPP
+class NFA
 {
 	public:
 		//Initial state
@@ -48,7 +48,23 @@ class NFA_HPP
 		}
 		return true;
 	}
+
 	private:
-	
-	
+		
 }
+
+template <class State>
+class ttree;
+	
+template <class State>
+class ttree
+{
+	public
+	ttree(State s, Char trans, bool status, vector<ttree> kids) : s(s), trans(trans) status(status), kids(kids)();
+	
+	State s;
+	Char trans;
+	bool status;
+	vector<ttree> kids;	
+	
+};
