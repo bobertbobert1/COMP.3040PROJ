@@ -30,6 +30,24 @@ class NFA_HPP
 	{
 		return NFA(d.Q, d.q0, d.delta, d.F);
 	}
+	
+	bool oracle(vector<pair<State, Char>> trace)
+	{
+		if(trace.size()>0)
+		{
+			for(int i=1; i<trace.size();i++)
+			{
+				vector<State> stated = delta(trace[i-1].first,trace[i].second);
+				typename vector<State>::iterator run;
+				run = find(stated.begin(),stated.end(),trace[i].first);
+				if(run==stated.end())
+				{
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	private:
 	
 	

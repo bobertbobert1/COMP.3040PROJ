@@ -680,6 +680,7 @@ int main(void)
 			if(s==a&&n==epsilon)
 			{
 				chars.push_back(b);
+				pass++;
 				return chars;
 			}
 			chars.push_back(a);
@@ -688,11 +689,19 @@ int main(void)
 		};
 		
 		NFA<Char> epsilontest(nQ,a,ndelta,nF);
+		vector<pair<Char, Char>> otest;
+		otest.push_back(make_pair(a, epsilon));
+		otest.push_back(make_pair(b, c));
+		otest.push_back(make_pair(a, d));
+		otest.push_back(make_pair(e, f));
 		
-		if(failed > 0)
+		epsilontest.oracle(otest) == true ? pass++ : fail++;
+		if(pass!=2)
 		{
 			cout << "Failed 1 or more NFA tests/n";
 		}
+		
+		return fail==0;
 	}
 	template <typename T, typename TT>
 	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
