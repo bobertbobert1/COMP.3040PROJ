@@ -41,6 +41,7 @@ bool nfatest();
 
 //Initialize the dictionary
 Alpha dictionary;
+Char epsilon(-1);
 Char a(1);
 Char b(2);
 Char c(3);
@@ -649,35 +650,49 @@ int main(void)
 	
 	bool nfatest()
 	{
-		DFA<int> Aaccept = cDFA(a);
-		DFA<int> Baccept = cDFA(b);
-		DFA<int> eNumaccept([](int qi)
+		int pass = 0;
+		int fail = 0;
+		
+		
+		function <bool(Char)> Q = [](Char s)
 		{
-			return qi==0 || qi==1;
-		}, 0,
-		[](int qi, Char c)
+			return s==a || s==b || s==c || s==d || s==e || s==f;
+		};
+		
+		function <bool(Char)> nQ = [](Char s)
 		{
-			if(c==a)
+			retun s==a||s==b;
+		};
+		
+		function<bool(Char)> F = [](Char s)
+		{
+			return s==d;
+		};
+		
+		function<bool(Char)> nF = [](Char s)
+		{
+			return s==d;
+		};
+		
+		function<vector<Char>(Char, Char)> ndelta = [](Char s, Char n)
+		{
+			vector<Char> chars;
+			if(s==a&&n==epsilon)
 			{
-				return 1;
+				chars.push_back(b);
+				return chars;
 			}
-			else
-			{
-				return 0;
-			}
-		},
-		[](int qi)
+			chars.push_back(a);
+			return chars;
+			
+		};
+		
+		NFA<Char> epsilontest(nQ,a,ndelta,nF);
+		
+		if(failed > 0)
 		{
-			return qi==0;
-		});
-		DFA<pair<int, int>> only1accept = intersectdfa(eNumaccept,Baccept);
-		DFA<pair<int, int>> eNumand2accept = uniondfa(eNumaccept,Baccept);
-		DFA<int> oNumaccept = flippeddfa(eNumaccept);
-		
-		
-		
-		
-		
+			cout << "Failed 1 or more NFA tests/n";
+		}
 	}
 	template <typename T, typename TT>
 	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
