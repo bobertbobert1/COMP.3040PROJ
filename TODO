@@ -22,10 +22,10 @@ DONE Write a dozen tests for your equality function.
 DONE Verify your complement, union, and intersect functions using the equality function.
 DONE Define a data type to represent NFAs.
 DONE Write a (trivial) function that converts DFAs into NFAs.
-Write a dozen example NFAs.
-For each example NFA, write a dozen traces of their behavior.
-(Oracle) Write a function that given an NFA, a string, a trace, and a boolean, determines if the trace is a valid execution of the NFA and accepts results in the given boolean.
-Define a data type to represent trace trees.
+DONE Write a dozen example NFAs.
+DONE For each example NFA, write a dozen traces of their behavior.
+DONE (Oracle) Write a function that given an NFA, a string, a trace, and a boolean, determines if the trace is a valid execution of the NFA and accepts results in the given boolean.
+DONE Define a data type to represent trace trees.
 For each example NFA, write a half-dozen trace trees of their behavior.
 (Forking) Write a function that given an NFA and a string, returns a tree of all possible traces.
 For each example NFA, write a dozen tests of their behavior.
