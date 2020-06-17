@@ -65,7 +65,6 @@ bool failed()
 {
 	return failed;
 }
-
 ostream& operator<<(ostream& output, Str& s)
 {
 	for(int i=0;i<s.chars.size();i++)

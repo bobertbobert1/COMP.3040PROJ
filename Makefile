@@ -4,7 +4,7 @@ CFLGS = -c -g -Og -Wall -Werror -ansi -pedantic
 all: main.o Char.o Alpha.o Str.o
 	$(CC) main.o char.o alpha.o str.o -o 3040
 	
-main.o: main.cpp DFA.hpp NFA.hpp
+main.o: main.cpp DFA.hpp
 	$(CC) $(CFLGS) -o main.o main.cpp
 	
 char.o: Char.cpp Char.hpp

@@ -37,11 +37,8 @@ bool statestest();
 bool stringfindtest();
 bool flippeddfatest();
 
-bool nfatest();
-
 //Initialize the dictionary
 Alpha dictionary;
-Char epsilon(-1);
 Char a(1);
 Char b(2);
 Char c(3);
@@ -648,61 +645,6 @@ int main(void)
 		return false;
 	}
 	
-	bool nfatest()
-	{
-		int pass = 0;
-		int fail = 0;
-		
-		
-		function <bool(Char)> Q = [](Char s)
-		{
-			return s==a || s==b || s==c || s==d || s==e || s==f;
-		};
-		
-		function <bool(Char)> nQ = [](Char s)
-		{
-			retun s==a||s==b;
-		};
-		
-		function<bool(Char)> F = [](Char s)
-		{
-			return s==d;
-		};
-		
-		function<bool(Char)> nF = [](Char s)
-		{
-			return s==d;
-		};
-		
-		function<vector<Char>(Char, Char)> ndelta = [](Char s, Char n)
-		{
-			vector<Char> chars;
-			if(s==a&&n==epsilon)
-			{
-				chars.push_back(b);
-				pass++;
-				return chars;
-			}
-			chars.push_back(a);
-			return chars;
-			
-		};
-		
-		NFA<Char> epsilontest(nQ,a,ndelta,nF);
-		vector<pair<Char, Char>> otest;
-		otest.push_back(make_pair(a, epsilon));
-		otest.push_back(make_pair(b, c));
-		otest.push_back(make_pair(a, d));
-		otest.push_back(make_pair(e, f));
-		
-		epsilontest.oracle(otest) == true ? pass++ : fail++;
-		if(pass!=2)
-		{
-			cout << "Failed 1 or more NFA tests/n";
-		}
-		
-		return fail==0;
-	}
 	template <typename T, typename TT>
 	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
 	{
