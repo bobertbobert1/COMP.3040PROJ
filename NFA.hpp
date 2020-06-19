@@ -26,9 +26,9 @@ class NFA
 			
 		NFA(std::function<bool(State)> Q, State q0, std::function<State(State, Char)> delta, std::function<bool(State)> F) :Q(Q), q0(q0), delta(delta), F(F) {};	
 	
-	NFA convert(DFA d)
+	NFA<State> convert(DFA<State> d)
 	{
-		return NFA(d.Q, d.q0, d.delta, d.F);
+		return NFA<State>(d.Q, d.q0, d.delta, d.F);
 	}
 	
 	bool oracle(vector<pair<State, Char>> trace)
@@ -68,3 +68,47 @@ class ttree
 	vector<ttree> kids;	
 	
 };
+
+template <class State>
+ttree<State> forkalg(NFA<State> n, Str s, State qi)
+{
+	vector<ttree<State>> kids;
+	vector<State> epsilon = n.delta(qi, Char(-1));
+	for(int i = epsilon.begin(); i != epsilon.end();i++)
+	{
+		kids.push_back(forkalg(n,s,*i));
+	}
+	
+	if(s.length()!=0)
+	{
+		Char c = s.front();
+		vector<State> next = n.delta(qi,c);
+		s.pop_front();
+		for(int i=next.begin();i!=next.end();i++)
+		{
+			kids.push_back(forkalg(n,s,*i));
+		}
+		return ttree<State>(qi,c,n.F(qi),kids);
+		
+	}
+	return ttree<State>(qi,Char(-1),n.F(qi),kids);
+}
+	
+template<class State>
+ttree<State> fork(NFA<State> n, Str s)
+{
+	return forkalg(n,s,n.q0);
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

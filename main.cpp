@@ -37,8 +37,12 @@ bool statestest();
 bool stringfindtest();
 bool flippeddfatest();
 
+bool nfatest();
+bool ttreetest();
+
 //Initialize the dictionary
 Alpha dictionary;
+Char epsilon(-1);
 Char a(1);
 Char b(2);
 Char c(3);
@@ -600,6 +604,138 @@ int main(void)
 		equalitydfa(only1accept,Baccept,dictionary) == false ? pass++ : fail++;
 		equalitydfa(Baccept,A2accept,dictionary) == false ? pass++ : fail++;
 		
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
+	}
+	
+	bool nfatest()
+	{
+		int pass = 0;
+		int fail = 0;
+
+
+		function <bool(Char)> Q = [](Char s)
+		{
+			return s==a || s==b || s==c || s==d || s==e || s==f;
+		};
+
+		function <bool(Char)> nQ = [](Char s)
+		{
+			retun s==a||s==b;
+		};
+
+		function<bool(Char)> F = [](Char s)
+		{
+			return s==d;
+		};
+
+		function<bool(Char)> nF = [](Char s)
+		{
+			return s==d;
+		};
+
+		function<vector<Char>(Char, Char)> ndelta = [](Char s, Char n)
+		{
+			vector<Char> chars;
+			if(s==a&&n==epsilon)
+			{
+				chars.push_back(b);
+				pass++;
+				return chars;
+			}
+			chars.push_back(a);
+			return chars;
+
+		};
+
+		NFA<Char> epsilontest(nQ,a,ndelta,nF);
+		vector<pair<Char, Char>> otest;
+		otest.push_back(make_pair(a, epsilon));
+		otest.push_back(make_pair(b, c));
+		otest.push_back(make_pair(a, d));
+		otest.push_back(make_pair(e, f));
+
+		epsilontest.oracle(otest) == true ? pass++ : fail++;
+		if(pass!=2)
+		{
+			cout << "Failed 1 or more NFA tests/n";
+		}
+
+		return fail==0;
+	}
+	
+	bool ttreetest()
+	{
+		int pass=0;
+		int fail=0;
+		
+		function<bool(Char)> Q = [](Char state)
+		{
+			return s==a||s==b||s==c||s==d;
+		};
+		
+		function<vector<Char>(Char, Char)> nd = [](Char state, Char n)
+		{
+			vector<Char> chars;
+			if(n==epsilon)
+			{
+				return chars;
+			}
+			if(s==a)
+			{
+				chars.push_back(a);
+				if(n==1)
+				{
+					chars.push_back(b);
+				}	
+			}
+			else if(s==b)
+			{
+				chars.push_back(c);
+			}
+			else if(s==c)
+			{
+				chars.push_back(d);
+			}
+			return chars;
+		};
+		
+		function<bool(Char)> F = [](Char state)
+		{
+			return s==d;
+		};
+		
+		NFA<Char> nFa(Q,a,nd,F);
+		function<bool(Char)> nQ = [](Char state)
+		{
+			return s==a||s==b;
+		}
+		
+		function<Vector<Char>(Char, Char)> ndelta = [](Char state, Char n)
+		{
+			vector<Char> chars;
+			if(s==a||n==epsilon)
+			{
+				chars.push_back(b);
+				return chars;
+			}
+			chars.push_back(a);
+			return chars;
+		};
+		
+		function <bool(Char)> nF = [](Char state)
+		{
+			return s==d;
+		};
+		NFA<Char> epsilontest(nQ,a,ndelta,nF);
+		Str eptest(dictionary);
+		eptest.add(a);
+		eptest.add(b);
 		
 		if(fail > 0)
 		{
