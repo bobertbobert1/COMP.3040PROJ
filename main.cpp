@@ -39,6 +39,7 @@ bool flippeddfatest();
 
 bool nfatest();
 bool ttreetest();
+bool backtracktest();
 
 //Initialize the dictionary
 Alpha dictionary;
@@ -736,6 +737,56 @@ int main(void)
 		Str eptest(dictionary);
 		eptest.add(a);
 		eptest.add(b);
+		
+		if(fail > 0)
+		{
+			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
+		}
+		
+		return fail==0;
+	}
+	
+	bool backtracktest()
+	{
+		int pass=0;
+		int fail=0;
+		
+		function<bool(Char)> Q = [](Char state)
+		{
+			return s==a||s==b||s==c||s==d;
+		};
+		
+		function<vector<Char>(Char, Char)> nd = [](Char state, Char n)
+		{
+			vector<Char> chars;
+			if(n==epsilon)
+			{
+				return chars;
+			}
+			if(s==a)
+			{
+				chars.push_back(a);
+				if(n==1)
+				{
+					chars.push_back(b);
+				}	
+			}
+			else if(s==b)
+			{
+				chars.push_back(c);
+			}
+			else if(s==c)
+			{
+				chars.push_back(d);
+			}
+			return chars;
+		};
+		
+		function<bool(Char)> F = [](Char state)
+		{
+			return s==d;
+		};
+		
 		
 		if(fail > 0)
 		{

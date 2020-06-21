@@ -99,7 +99,46 @@ ttree<State> fork(NFA<State> n, Str s)
 {
 	return forkalg(n,s,n.q0);
 }
+
+template <class State>
+bool backtrackalg(NFA<State> n, Str s, State qi)
+{
+	vector<State> epsilon = n.delta(qi,Char(-1));
+	for(int i = epsilon.begin();i!=epsilon.end();i++)
+	{
+		if(backtrackalg(n,s,*i))
+		{
+			return true;
+		}
+	}
 	
+	int size = s.length();
+	if(size>0)
+	{
+		Char c = s.front();
+		vector<State> next = n.delta(qi,c);
+		s.pop_front();
+		for(int i=next.begin();i!=next.end();i++)
+		{
+			if(backtrackalg(n,s,*i))
+			{
+				return true;
+			}
+		}
+	}
+	
+	if(size<=0)
+	{
+		return n.F(qi);
+	}
+	return false;
+}
+
+template<class State>
+bool backtrack(NFA<State> n, Str s)
+{
+	return backtrackalg(n,s,n.q0);
+}
 	
 	
 	
