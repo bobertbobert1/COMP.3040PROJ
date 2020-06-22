@@ -16,12 +16,13 @@ class Str
 		void pop_back();
 		void setfail();
 		bool failed();
+		int length();
 		friend std::ostream& operator<<(std::ostream& output, Str& s);
 		
 	private:
 		Alpha aobj;
 		std::vector<Char> chars;
-		bool failed = false;
+		bool failv = false;
 };
 
 #endif

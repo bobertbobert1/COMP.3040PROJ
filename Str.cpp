@@ -58,12 +58,17 @@ void Str::pop_back()
 
 void setfail()
 {
-	failed=true;
+	failv=true;
 }
 
 bool failed()
 {
-	return failed;
+	return failv;
+}
+
+int length()
+{
+	return chars.length();
 }
 ostream& operator<<(ostream& output, Str& s)
 {

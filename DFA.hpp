@@ -1,7 +1,7 @@
 #ifndef DFA_HPP
 #define DFA_HPP
 
-#include "String.hpp"
+#include "Str.hpp"
 #include "Char.hpp"
 #include "Alpha.hpp"
 #include <functional>
@@ -26,7 +26,7 @@ class DFA
 		
 		DFA(std::function<bool(State)> Q, State q0, std::function<State(State, Char)> delta, std::function<bool(State)> F) :Q(Q), q0(q0), delta(delta), F(F) {};
 		
-		bool checks(Str s)
+		bool accepts(Str s)
 		{
 			int len = s.length();
 			State qi = q0;
@@ -43,7 +43,7 @@ class DFA
 			Str strong(bet);
 			vector<State> passed;
 			State qi = q0;
-			return searchalg(vector<State> passed, State qi, Str strong, Alpha bet);
+			return searchalg(passed,qi,strong,bet);
 		}
 			
 	private:
@@ -70,7 +70,7 @@ class DFA
 					Str strong3 = strong;
 					strong3.add(bet[i]);
 					State qnext = delta(qi, bet[i]);
-					String strong2 = searchalg(passed, qnext, strong3, bet);
+					Str strong2 = searchalg(passed, qnext, strong3, bet);
 					if(!strong2.failed())
 					{
 						return strong2;

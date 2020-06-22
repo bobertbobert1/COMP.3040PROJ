@@ -27,7 +27,90 @@ template <typename T, typename TT>
 bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet);
 
 template <typename T, typename TT>
-bool equalitydfa(DFA<T> d1, DFA<TT>,d2, Alpha bet);
+bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet);
+
+template <typename T, typename TT>
+	bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+	{
+		DFA<TT> flippedd2 = flippeddfa(d2);
+		DFA<pair<T,TT>> intersectdfa1 = intersectdfa(d1, flippedd2);
+		
+		DFA<T> flippedd1 = flippeddfa(d1);
+		DFA<pair<TT, T>> intersectdfa2 = intersectdfa(d2, flippedd1);
+		
+		Str ans1 = findstr(intersectdfa1, bet);
+		Str ans2 = findstr(intersectdfa2, bet);
+		
+		if(ans1.failed())
+		{
+			return true;
+		}
+		
+		if(ans2.failed())
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	template <typename T, typename TT>
+	bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+	{
+		DFA<TT> flippedd2 = flippeddfa(d2);
+		DFA<pair<T,TT>> intersected = intersectdfa(d1,flippedd2);
+		Str answer = findstr(intersected, bet);
+		if(answer.failed())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	template <typename T, typename TT>
+	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
+	{
+		function<bool(pair<T, TT>)> Q = [d1, d2](pair<T, TT> qi) 
+		{
+			return d1.Q(qi.first) || d2.Q(qi.second);
+		};
+		pair<T, TT> q0(d1.q0, d2.q0);
+		function<pair<T, TT>(pair<T, TT>, Char)> delta =[d1, d2](pair<T, TT> qi, Char cobj) 
+		{
+			T qi1 = d1.delta(qi.first, cobj);
+			TT qi2 = d2.delta(qi.second, cobj);
+			pair<T, TT> finalpair(qi1, qi2);
+			return finalpair;
+		};
+		function<bool(pair<T, TT>)> F = [d1, d2](pair<T, TT> qi) 
+		{
+			return d1.F(qi.first) || d2.F(qi.second);
+		};
+		DFA<pair<T, TT>> finaldfa(Q, q0, delta, F);
+		return finaldfa;
+	}
+	
+	template <typename T, typename TT>
+	DFA<pair<T, TT>> intersectdfa(DFA<T> d1, DFA<TT> d2)
+	{
+		function<bool(pair<T,TT>)> Q = [d1, d2](pair<T,TT> qi)
+		{
+			return d1.Q(qi.first) || d2.Q(qi.second);
+		}
+		pair<T,TT> q0(d1.q0,d2.q0);
+		function<pair<T,TT>(pair<T,TT>,Char)> delta = [d1,d2](pair<T,TT> qi, Char cobj)
+		{
+			T qi1 = d1.delta(qi.first, cobj);
+			TT qi2 = d2.delta(qi.second, cobj);
+			DFA<pair<T, TT>> finaldfa(qi1, qi2);
+			return finaldfa;
+		};
+		function<bool(pair<T,TT>)> F = [d1,d2](pair<T,TT> qi)
+		{
+			return d1.F(qi.first) && d2.F(qi.second);
+		};
+		DFA<pair<T,TT>> finaldfa(Q, q0, delta, F);
+		return finaldfa;
+	}
 
 bool equalitytest();
 bool subsettest();
@@ -60,7 +143,7 @@ Str t7(dictionary);
 Str t8(dictionary);
 Str t9(dictionary);
 Str t10(dictionary);
-Str t11(dictonary);
+Str t11(dictionary);
 Str t12(dictionary);
 
 //Character DFA Function
@@ -119,14 +202,73 @@ int main(void)
 	{
 		return qi==0;
 	});
-	
+	DFA<int> c1accept = cDFA(a);
+	DFA<int> c2accept = cDFA(b);
+	DFA<int> c3accept = cDFA(c);
 	//Output
 	cout << first << " " << second << "0/n";
 	cout << bet << "/n";
 	cout << s << "/n" ;
 	bet.lex(0);
-	let.lex(1);
-	bool eNum()
+	bet.lex(1);
+	successString(ns, t1) == false ? pass++ : fail++;
+	successString(ns, t2) == false ? pass++ : fail++;
+	successString(ns, t3) == false ? pass++ : fail++;
+	successString(ns, t4) == false ? pass++ : fail++;
+	successString(ns, t5) == false ? pass++ : fail++;
+	successString(ns, t6) == false ? pass++ : fail++;
+	successString(ns, t7) == false ? pass++ : fail++;
+	successString(ns, t8) == false ? pass++ : fail++;
+	successString(ns, t9) == false ? pass++ : fail++;
+	successString(ns, t10) == false ? pass++ : fail++;
+	successString(ns, t11) == false ? pass++ : fail++;
+	successString(ns, t12) == false ? pass++ : fail++;
+	successString(c1accept, t1) == true ? pass++ : fail++;
+	successString(c1accept, t2) == false ? pass++ : fail++;
+	successString(c1accept, t3) == false ? pass++ : fail++;
+	successString(c1accept, t4) == false ? pass++ : fail++;
+	successString(c1accept, t5) == false ? pass++ : fail++;
+	successString(c1accept, t6) == false ? pass++ : fail++;
+	successString(c1accept, t7) == false ? pass++ : fail++;
+	successString(c1accept, t8) == false ? pass++ : fail++;
+	successString(c1accept, t9) == false ? pass++ : fail++;
+	successString(c1accept, t10) == false ? pass++ : fail++;
+	successString(c1accept, t11) == false ? pass++ : fail++;
+	successString(c1accept, t12) == false ? pass++ : fail++;
+	successString(c2accept, t1) == false ? pass++ : fail++;
+	successString(c2accept, t2) == true ? pass++ : fail++;
+	successString(c2accept, t3) == false ? pass++ : fail++;
+	successString(c2accept, t4) == false ? pass++ : fail++;
+	successString(c2accept, t5) == false ? pass++ : fail++;
+	successString(c2accept, t6) == false ? pass++ : fail++;
+	successString(c2accept, t7) == false ? pass++ : fail++;
+	successString(c2accept, t8) == false ? pass++ : fail++;
+	successString(c2accept, t9) == false ? pass++ : fail++;
+	successString(c2accept, t10) == false ? pass++ : fail++;
+	successString(c2accept, t11) == false ? pass++ : fail++;
+	successString(c2accept, t12) == false ? pass++ : fail++;
+	successString(c3accept, t1) == false ? pass++ : fail++;
+	successString(c3accept, t2) == false ? pass++ : fail++;
+	successString(c3accept, t3) == true ? pass++ : fail++;
+	successString(c3accept, t4) == false ? pass++ : fail++;
+	successString(c3accept, t5) == false ? pass++ : fail++;
+	successString(c3accept, t6) == false ? pass++ : fail++;
+	successString(c3accept, t7) == false ? pass++ : fail++;
+	successString(c3accept, t8) == false ? pass++ : fail++;
+	successString(c3accept, t9) == false ? pass++ : fail++;
+	successString(c3accept, t10) == false ? pass++ : fail++;
+	successString(c3accept, t11) == false ? pass++ : fail++;
+	successString(c3accept, t12) == false ? pass++ : fail++;
+	if(fail >0)
+	{
+		pass=0;
+		cout << "Task 10 function had 1 or more failed functions!/n";
+	}
+	
+	return 0;
+}
+
+bool eNum()
 	{
 		int pass = 0;
 		int fail = 0;
@@ -165,6 +307,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "eNum failed 1 or more tests/n";
 		}
 		return fail==0;
@@ -196,9 +339,10 @@ int main(void)
 		defDFA.accepts(t1) == true ? pass++ : fail++;
 		defDFA.accepts(t2) == false ? pass++ : fail++;
 		defDFA.accepts(t3) == true ? pass++ : fail++;
-		dfaDFA.accepts(t4) == false ? pass++ : fail++;
+		defDFA.accepts(t4) == false ? pass++ : fail++;
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "defDFA failed 1 or more tests/n";
 		}
 		return fail==0;
@@ -214,6 +358,7 @@ int main(void)
 		c1accept.accepts(t4) == false ? pass++ : fail++;
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "c1DFA failed 1 or more tests/n";
 		}
 		return fail==0;
@@ -229,6 +374,7 @@ int main(void)
 		c2accept.accepts(t4) == false ? pass++ : fail++;
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "c2DFA failed 1 or more tests/n";
 		}
 		return fail==0;
@@ -244,12 +390,15 @@ int main(void)
 		c3accept.accepts(t4) == false ? pass++ : fail++;
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "c3DFA failed 1 or more tests/n";
 		}
 		return fail==0;
 	}
 	bool nS()
 	{
+		int pass = 0;
+		int fail = 0;
 		DFA<int> ns([](int qi)
 		{
 			return qi==0 || qi==1;
@@ -275,6 +424,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "noString failed 1 or more tests/n";
 		}
 		return fail==0;
@@ -311,6 +461,12 @@ int main(void)
 
 		vector<<pair<int, Char>> statelist = eNumaccept.acceptsandstates(t1);
 
+		if(fail > 0)
+		{
+			pass=0;
+			cout << "states test failed D:/n";
+		}
+		return fail==0;
 		return true;
 	}
 	
@@ -349,10 +505,15 @@ int main(void)
 					fail++;
 					break;
 				}
+				else
+				{
+					pass++;
+				}
 			}
 			
 			if(fail!=0)
 			{
+				pass=0;
 				cout << "Oh no the findstr test failed!/n";
 			}
 			return fail==0;
@@ -412,6 +573,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
@@ -461,6 +623,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
@@ -511,6 +674,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
@@ -560,6 +724,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
@@ -608,6 +773,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
@@ -627,7 +793,7 @@ int main(void)
 
 		function <bool(Char)> nQ = [](Char s)
 		{
-			retun s==a||s==b;
+			return s==a||s==b;
 		};
 
 		function<bool(Char)> F = [](Char s)
@@ -675,12 +841,12 @@ int main(void)
 		int pass=0;
 		int fail=0;
 		
-		function<bool(Char)> Q = [](Char state)
+		function<bool(Char)> Q = [](Char s)
 		{
 			return s==a||s==b||s==c||s==d;
 		};
 		
-		function<vector<Char>(Char, Char)> nd = [](Char state, Char n)
+		function<vector<Char>(Char, Char)> nd = [](Char s, Char n)
 		{
 			vector<Char> chars;
 			if(n==epsilon)
@@ -706,18 +872,18 @@ int main(void)
 			return chars;
 		};
 		
-		function<bool(Char)> F = [](Char state)
+		function<bool(Char)> F = [](Char s)
 		{
 			return s==d;
 		};
 		
-		NFA<Char> nFa(Q,a,nd,F);
-		function<bool(Char)> nQ = [](Char state)
+		NFA<Char> nfa2(Q,a,nd,F);
+		function<bool(Char)> nQ = [](Char s)
 		{
 			return s==a||s==b;
-		}
+		};
 		
-		function<Vector<Char>(Char, Char)> ndelta = [](Char state, Char n)
+		function<Vector<Char>(Char, Char)> ndelta = [](Char s, Char n)
 		{
 			vector<Char> chars;
 			if(s==a||n==epsilon)
@@ -729,7 +895,7 @@ int main(void)
 			return chars;
 		};
 		
-		function <bool(Char)> nF = [](Char state)
+		function <bool(Char)> nF = [](Char s)
 		{
 			return s==d;
 		};
@@ -740,6 +906,7 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
@@ -751,12 +918,12 @@ int main(void)
 		int pass=0;
 		int fail=0;
 		
-		function<bool(Char)> Q = [](Char state)
+		function<bool(Char)> Q = [](Char s)
 		{
 			return s==a||s==b||s==c||s==d;
 		};
 		
-		function<vector<Char>(Char, Char)> nd = [](Char state, Char n)
+		function<vector<Char>(Char, Char)> nd = [](Char s, Char n)
 		{
 			vector<Char> chars;
 			if(n==epsilon)
@@ -774,6 +941,7 @@ int main(void)
 			else if(s==b)
 			{
 				chars.push_back(c);
+				fail++;
 			}
 			else if(s==c)
 			{
@@ -790,148 +958,12 @@ int main(void)
 		
 		if(fail > 0)
 		{
+			pass=0;
 			cout << "The inverse DFA that accepts odd length DFAs has failed 1 or more tests!/n";
 		}
 		
 		return fail==0;
 	}
-	template <typename T, typename TT>
-	bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
-	{
-		DFA<TT> flippedd2 = flippeddfa(d2);
-		DFA<pair<T,TT>> intersectdfa1 = intersectdfa(d1, flippedd2);
-		
-		DFA<T> flippedd1 = flippeddfa(d1);
-		DFA<pair<TT, T>> intersectdfa2 = intersectdfa(d2, flippedd1);
-		
-		String ans1 = findstr(intersectdfa1, bet);
-		String ans2 = findstr(intersectdfa2, bet);
-		
-		if(ans1.failed())
-		{
-			return true;
-		}
-		
-		if(ans2.failed())
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	template <typename T, typename TT>
-	bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
-	{
-		DFA<TT> flippedd2 = flippeddfa(d2);
-		DFA<pair<T,TT>> intersected = intersectdfa(d1,flippedd2);
-		Str answer = findstr(intersected, bet);
-		if(answer.failed())
-		{
-			return true;
-		}
-		return false;
-	}
-	
-	template <typename T, typename TT>
-	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
-	{
-		function<bool(pair<T, TT>)> Q = [d1, d2](pair<T, TT> qi) 
-		{
-			return d1.Q(qi.first) || d2.Q(qi.second);
-		};
-		pair<T, TT> q0(d1.q0, d2.q0);
-		function<pair<T, TT>(pair<T, TT>, Char)> delta =[d1, d2](pair<T, TT> qi, Char cobj) 
-		{
-			T qi1 = d1.delta(qi.first, cobj);
-			TT qi2 = d2.delta(qi.second, cobj);
-			pair<T, TT> finalpair(qi1, qi2);
-			return finalrepair;
-		};
-		function<bool(pair<T, TT>)> F = [d1, d2](pair<T, TT> qi) 
-		{
-			return d1.F(qi.first) || d2.F(qi.second);
-		};
-		DFA<pair<T1, T2>> finaldfa(Q, q0, delta, F);
-		return finaldfa;
-	}
-	
-	template <typename T, typename TT>
-	DFA<pair<T, TT> intersectdfa(DFA<T> d1, DFA<TT> d2)
-	{
-		function<bool(pair<T,TT>)> Q = [d1, d2](pair<T,TT> qi)
-		{
-			return d1.Q(qi.first) || d2.Q(qi,second);
-		}
-		pair<T,TT> q0(d1.q0,d2.q0);
-		function<pair<T,TT>(pair<T,TT>,Char)> delta = [d1,d2](pair<T,TT> qi, Char cobj)
-		{
-			T qi1 = d1.delta(qi.first, cobj);
-			TT qi2 = d2.delta(qi.second, cobj);
-			pair<T, TT> finaldfa(qi1, qi2);
-			return finaldfa;
-		};
-		function<bool(pair<T,TT>)> F = [d1,d2](pair<T,TT> qi)
-		{
-			return d1.F(qi.first) && d2.F(qi.second);
-		};
-		DFA<pair<T,TT>> finaldfa(Q, q0, delta, F);
-		return finaldfa;
-	}
-	successString(ns, t1) == false ? pass++ : fail++;
-	successString(ns, t2) == false ? pass++ : fail++;
-	successString(ns, t3) == false ? pass++ : fail++;
-	successString(ns, t4) == false ? pass++ : fail++;
-	successString(ns, t5) == false ? pass++ : fail++;
-	successString(ns, t6) == false ? pass++ : fail++;
-	successString(ns, t7) == false ? pass++ : fail++;
-	successString(ns, t8) == false ? pass++ : fail++;
-	successString(ns, t9) == false ? pass++ : fail++;
-	successString(ns, t10) == false ? pass++ : fail++;
-	successString(ns, t11) == false ? pass++ : fail++;
-	successString(ns, t12) == false ? pass++ : fail++;
-	successString(c1accept, t1) == true ? pass++ : fail++;
-	successString(c1accept, t2) == false ? pass++ : fail++;
-	successString(c1accept, t3) == false ? pass++ : fail++;
-	successString(c1accept, t4) == false ? pass++ : fail++;
-	successString(c1accept, t5) == false ? pass++ : fail++;
-	successString(c1accept, t6) == false ? pass++ : fail++;
-	successString(c1accept, t7) == false ? pass++ : fail++;
-	successString(c1accept, t8) == false ? pass++ : fail++;
-	successString(c1accept, t9) == false ? pass++ : fail++;
-	successString(c1accept, t10) == false ? pass++ : fail++;
-	successString(c1accept, t11) == false ? pass++ : fail++;
-	successString(c1accept, t12) == false ? pass++ : fail++;
-	successString(c2accept, t1) == false ? pass++ : fail++;
-	successString(c2accept, t2) == true ? pass++ : fail++;
-	successString(c2accept, t3) == false ? pass++ : fail++;
-	successString(c2accept, t4) == false ? pass++ : fail++;
-	successString(c2accept, t5) == false ? pass++ : fail++;
-	successString(c2accept, t6) == false ? pass++ : fail++;
-	successString(c2accept, t7) == false ? pass++ : fail++;
-	successString(c2accept, t8) == false ? pass++ : fail++;
-	successString(c2accept, t9) == false ? pass++ : fail++;
-	successString(c2accept, t10) == false ? pass++ : fail++;
-	successString(c2accept, t11) == false ? pass++ : fail++;
-	successString(c2accept, t12) == false ? pass++ : fail++;
-	successString(c3accept, t1) == false ? pass++ : fail++;
-	successString(c3accept, t2) == false ? pass++ : fail++;
-	successString(c3accept, t3) == true ? pass++ : fail++;
-	successString(c3accept, t4) == false ? pass++ : fail++;
-	successString(c3accept, t5) == false ? pass++ : fail++;
-	successString(c3accept, t6) == false ? pass++ : fail++;
-	successString(c3accept, t7) == false ? pass++ : fail++;
-	successString(c3accept, t8) == false ? pass++ : fail++;
-	successString(c3accept, t9) == false ? pass++ : fail++;
-	successString(c3accept, t10) == false ? pass++ : fail++;
-	successString(c3accept, t11) == false ? pass++ : fail++;
-	successString(c3accept, t12) == false ? pass++ : fail++;
-	if(fail >0)
-	{
-		cout << "Task 10 function had 1 or more failed functions!/n";
-	}
-	
-	return 0;
-}
 
 
 

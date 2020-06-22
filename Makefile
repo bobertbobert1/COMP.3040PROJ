@@ -1,5 +1,5 @@
 CC = g++
-CFLGS = -c -g -Og -Wall -Werror -ansi -pedantic
+CFLGS = -c -g -Og -Wall -Werror -ansi -pedantic -std=c++11
 
 all: main.o Char.o Alpha.o Str.o
 	$(CC) main.o char.o alpha.o str.o -o 3040
