@@ -111,6 +111,14 @@ template <typename T, typename TT>
 		DFA<pair<T,TT>> finaldfa(Q, q0, delta, F);
 		return finaldfa;
 	}
+	
+	enum side {s,l,r};
+	template <typename T, typename TT>
+	NFA<pair<int, pair<optional<T>, optional<TT>>> unionnfa(NFA<T>, n1, NFA<TT> n2)
+	{
+	pair<int, pair<optional<T>, optional<TT>>> start = {s, NULL, NULL}};
+
+	}
 
 bool equalitytest();
 bool subsettest();
