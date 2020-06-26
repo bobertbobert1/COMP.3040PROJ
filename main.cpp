@@ -116,8 +116,69 @@ template <typename T, typename TT>
 	template <typename T, typename TT>
 	NFA<pair<int, pair<optional<T>, optional<TT>>> unionnfa(NFA<T>, n1, NFA<TT> n2)
 	{
-	pair<int, pair<optional<T>, optional<TT>>> start = {s, NULL, NULL}};
+	pair<int, pair<optional<T>, optional<TT>>> start = {s,{NULL, NULL}};
+	
+	function<vector<pair<int, pair<optional<T>, optional<TT>>>>
+	(
+		pair<int, pair<optional<T>, optional<TT>>>, Char)>
+		delta = [n1, n2, start](pair<int, pair<optional<T>, optional<TT>>> state, Char next) 
+		{
+			vector<pair<int, pair<optional<T>, optional<TT>>>> npair;
+			if (state == start && next == -1) 
+			{
+				npair.push_back({1, {n1.q0, NULL}});
+				npair.push_back({2, {NULL, n2.q0}});
+			} 
+			else if (state.first == l && state.second.first != NULL) 
+			{
+				vector<T> vt = n1.Delta(state.second.first.value(), next);
+				for (auto i = vt.begin(); i != vt.end(); i++) 
+				{
+					npair.push_back({l, {*i, NULL}});
+				}
+			} 
+			else if (state.first == r && state.second.second != NULL) 
+			{
+				vector<TT> vt = n2.Delta(state.second.second.value(), next);
+				for (auto i = vt.begin(); i != vt.end(); i++) 
+				{
+					npair.push_back({r, {NULL, *i}});
+				}
+			}
+        return npair;
+      };
 
+		function<bool(pair<int, pair<optional<T>, optional<TT>>>)> Q = [n1, n2, start](pair<int, pair<optional<T>, optional<TT>>> state) 
+		{
+			if (state == start) 
+			{
+				return true;
+			} 
+			else if (state.first == l && state.second.first != NULL) 
+			{
+				return n1.Q(state.second.first.value());
+			} 
+			else if (state.first == r && state.second.second != NULL) 
+			{
+				return n2.Q(state.second.second.value());
+			}
+			return false;
+		};
+	
+		function<bool(pair<int, pair<optional<T>, optional<TT>>>)> F = [n1, n2](pair<int, pair<optional<T>, optional<TT>>> state) 
+		{
+			if (state.first == l && state.second.first != NULL) 
+			{
+				return n1.F(state.second.first.value());
+			} 
+			else if (state.first == r && state.second.second != NULL) 
+			{
+				return n2.F(state.second.second.value());
+			}
+			return false;
+		};
+
+		return NFA<pair<int, pair<optional<T>, optional<TT>>>>(Q, start, delta, F);
 	}
 
 bool equalitytest();
