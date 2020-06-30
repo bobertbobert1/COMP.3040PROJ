@@ -11,6 +11,7 @@ bool c1DFA();
 bool c2DFA();
 bool c3DFA();
 bool nS();
+
 template <typename T>
 bool successString(DFA<T> dfa, Str s);
 
@@ -30,157 +31,221 @@ template <typename T, typename TT>
 bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet);
 
 template <typename T, typename TT>
-	bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+bool equalitydfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+{
+	DFA<TT> flippedd2 = flippeddfa(d2);
+	DFA<pair<T,TT>> intersectdfa1 = intersectdfa(d1, flippedd2);
+		
+	DFA<T> flippedd1 = flippeddfa(d1);
+	DFA<pair<TT, T>> intersectdfa2 = intersectdfa(d2, flippedd1);
+		
+	Str ans1 = findstr(intersectdfa1, bet);
+	Str ans2 = findstr(intersectdfa2, bet);
+		
+	if(ans1.failed())
 	{
-		DFA<TT> flippedd2 = flippeddfa(d2);
-		DFA<pair<T,TT>> intersectdfa1 = intersectdfa(d1, flippedd2);
-		
-		DFA<T> flippedd1 = flippeddfa(d1);
-		DFA<pair<TT, T>> intersectdfa2 = intersectdfa(d2, flippedd1);
-		
-		Str ans1 = findstr(intersectdfa1, bet);
-		Str ans2 = findstr(intersectdfa2, bet);
-		
-		if(ans1.failed())
-		{
-			return true;
-		}
-		
-		if(ans2.failed())
-		{
-			return true;
-		}
-		
-		return false;
+		return true;
 	}
-	template <typename T, typename TT>
-	bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+		
+	if(ans2.failed())
 	{
-		DFA<TT> flippedd2 = flippeddfa(d2);
-		DFA<pair<T,TT>> intersected = intersectdfa(d1,flippedd2);
-		Str answer = findstr(intersected, bet);
-		if(answer.failed())
-		{
-			return true;
-		}
-		return false;
+		return true;
 	}
+		
+	return false;
+}
+template <typename T, typename TT>
+bool subsetdfa(DFA<T> d1, DFA<TT> d2, Alpha bet)
+{
+	DFA<TT> flippedd2 = flippeddfa(d2);
+	DFA<pair<T,TT>> intersected = intersectdfa(d1,flippedd2);
+	Str answer = findstr(intersected, bet);
+	if(answer.failed())
+	{
+		return true;
+	}
+	return false;
+}
 	
-	template <typename T, typename TT>
-	DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
+template <typename T, typename TT>
+DFA<pair<T, TT>> uniondfa(DFA<T> d1, DFA<TT> d2)
+{
+	function<bool(pair<T, TT>)> Q = [d1, d2](pair<T, TT> qi) 
 	{
-		function<bool(pair<T, TT>)> Q = [d1, d2](pair<T, TT> qi) 
-		{
-			return d1.Q(qi.first) || d2.Q(qi.second);
-		};
-		pair<T, TT> q0(d1.q0, d2.q0);
-		function<pair<T, TT>(pair<T, TT>, Char)> delta =[d1, d2](pair<T, TT> qi, Char cobj) 
-		{
-			T qi1 = d1.delta(qi.first, cobj);
-			TT qi2 = d2.delta(qi.second, cobj);
-			pair<T, TT> finalpair(qi1, qi2);
-			return finalpair;
-		};
-		function<bool(pair<T, TT>)> F = [d1, d2](pair<T, TT> qi) 
-		{
-			return d1.F(qi.first) || d2.F(qi.second);
-		};
-		DFA<pair<T, TT>> finaldfa(Q, q0, delta, F);
+		return d1.Q(qi.first) || d2.Q(qi.second);
+	};
+	pair<T, TT> q0(d1.q0, d2.q0);
+	function<pair<T, TT>(pair<T, TT>, Char)> delta =[d1, d2](pair<T, TT> qi, Char cobj) 
+	{
+		T qi1 = d1.delta(qi.first, cobj);
+		TT qi2 = d2.delta(qi.second, cobj);
+		pair<T, TT> finalpair(qi1, qi2);
+		return finalpair;
+	};
+	function<bool(pair<T, TT>)> F = [d1, d2](pair<T, TT> qi) 
+	{
+		return d1.F(qi.first) || d2.F(qi.second);
+	};
+	DFA<pair<T, TT>> finaldfa(Q, q0, delta, F);
+	return finaldfa;
+}
+	
+template <typename T, typename TT>
+DFA<pair<T, TT>> intersectdfa(DFA<T> d1, DFA<TT> d2)
+{
+	function<bool(pair<T,TT>)> Q = [d1, d2](pair<T,TT> qi)
+	{
+		return d1.Q(qi.first) || d2.Q(qi.second);
+	}
+	pair<T,TT> q0(d1.q0,d2.q0);
+	function<pair<T,TT>(pair<T,TT>,Char)> delta = [d1,d2](pair<T,TT> qi, Char cobj)
+	{
+		T qi1 = d1.delta(qi.first, cobj);
+		TT qi2 = d2.delta(qi.second, cobj);
+		DFA<pair<T, TT>> finaldfa(qi1, qi2);
 		return finaldfa;
-	}
-	
-	template <typename T, typename TT>
-	DFA<pair<T, TT>> intersectdfa(DFA<T> d1, DFA<TT> d2)
+	};
+	function<bool(pair<T,TT>)> F = [d1,d2](pair<T,TT> qi)
 	{
-		function<bool(pair<T,TT>)> Q = [d1, d2](pair<T,TT> qi)
+		return d1.F(qi.first) && d2.F(qi.second);
+	};
+	DFA<pair<T,TT>> finaldfa(Q, q0, delta, F);
+	return finaldfa;
+}
+	
+enum side {s,l,r};
+template <typename T, typename TT>
+NFA<pair<int, pair<optional<T>, optional<TT>>> unionnfa(NFA<T>, n1, NFA<TT> n2)
+{
+pair<int, pair<optional<T>, optional<TT>>> start = {s,{NULL, NULL}};
+
+function<vector<pair<int, pair<optional<T>, optional<TT>>>>
+(
+	pair<int, pair<optional<T>, optional<TT>>>, Char)>
+	delta = [n1, n2, start](pair<int, pair<optional<T>, optional<TT>>> state, Char next) 
+	{
+		vector<pair<int, pair<optional<T>, optional<TT>>>> npair;
+		if (state == start && next == -1) 
 		{
-			return d1.Q(qi.first) || d2.Q(qi.second);
+			npair.push_back({1, {n1.q0, NULL}});
+			npair.push_back({2, {NULL, n2.q0}});
+		} 
+		else if (state.first == l && state.second.first != NULL) 
+		{
+			vector<T> vt = n1.Delta(state.second.first.value(), next);
+			for (auto i = vt.begin(); i != vt.end(); i++) 
+			{
+				npair.push_back({l, {*i, NULL}});
+			}
+		} 
+		else if (state.first == r && state.second.second != NULL) 
+		{
+			vector<TT> vt = n2.Delta(state.second.second.value(), next);
+			for (auto i = vt.begin(); i != vt.end(); i++) 
+			{
+				npair.push_back({r, {NULL, *i}});
+			}
 		}
-		pair<T,TT> q0(d1.q0,d2.q0);
-		function<pair<T,TT>(pair<T,TT>,Char)> delta = [d1,d2](pair<T,TT> qi, Char cobj)
-		{
-			T qi1 = d1.delta(qi.first, cobj);
-			TT qi2 = d2.delta(qi.second, cobj);
-			DFA<pair<T, TT>> finaldfa(qi1, qi2);
-			return finaldfa;
-		};
-		function<bool(pair<T,TT>)> F = [d1,d2](pair<T,TT> qi)
-		{
-			return d1.F(qi.first) && d2.F(qi.second);
-		};
-		DFA<pair<T,TT>> finaldfa(Q, q0, delta, F);
-		return finaldfa;
-	}
-	
-	enum side {s,l,r};
-	template <typename T, typename TT>
-	NFA<pair<int, pair<optional<T>, optional<TT>>> unionnfa(NFA<T>, n1, NFA<TT> n2)
+		return npair;
+    };
+	function<bool(pair<int, pair<optional<T>, optional<TT>>>)> Q = [n1, n2, start](pair<int, pair<optional<T>, optional<TT>>> state) 
 	{
+		if (state == start) 
+		{
+			return true;
+		} 
+		else if (state.first == l && state.second.first != NULL) 
+		{
+			return n1.Q(state.second.first.value());
+		} 
+		else if (state.first == r && state.second.second != NULL) 
+		{
+			return n2.Q(state.second.second.value());
+		}
+		return false;
+	};
+
+	function<bool(pair<int, pair<optional<T>, optional<TT>>>)> F = [n1, n2](pair<int, pair<optional<T>, optional<TT>>> state) 
+	{
+		if (state.first == l && state.second.first != NULL) 
+		{
+			return n1.F(state.second.first.value());
+		} 
+		else if (state.first == r && state.second.second != NULL) 
+		{
+			return n2.F(state.second.second.value());
+		}
+		return false;
+	};
+	return NFA<pair<int, pair<optional<T>, optional<TT>>>>(Q, start, delta, F);
+	}
+
+template <class T, class TT>
+NFA<pair<int, pair<optional<T>, optional<TT>>>> connfa(NFA<T> n1, NFA<TT> n2) 
+{
 	pair<int, pair<optional<T>, optional<TT>>> start = {s,{NULL, NULL}};
-	
-	function<vector<pair<int, pair<optional<T>, optional<TT>>>>
-	(
-		pair<int, pair<optional<T>, optional<TT>>>, Char)>
-		delta = [n1, n2, start](pair<int, pair<optional<T>, optional<TT>>> state, Char next) 
-		{
-			vector<pair<int, pair<optional<T>, optional<TT>>>> npair;
-			if (state == start && next == -1) 
-			{
-				npair.push_back({1, {n1.q0, NULL}});
-				npair.push_back({2, {NULL, n2.q0}});
-			} 
-			else if (state.first == l && state.second.first != NULL) 
-			{
-				vector<T> vt = n1.Delta(state.second.first.value(), next);
-				for (auto i = vt.begin(); i != vt.end(); i++) 
-				{
-					npair.push_back({l, {*i, NULL}});
-				}
-			} 
-			else if (state.first == r && state.second.second != NULL) 
-			{
-				vector<TT> vt = n2.Delta(state.second.second.value(), next);
-				for (auto i = vt.begin(); i != vt.end(); i++) 
-				{
-					npair.push_back({r, {NULL, *i}});
-				}
-			}
-        return npair;
-      };
 
-		function<bool(pair<int, pair<optional<T>, optional<TT>>>)> Q = [n1, n2, start](pair<int, pair<optional<T>, optional<TT>>> state) 
+	function<vector<pair<int, pair<optional<T>, optional<TT>>>>(pair<int, pair<optional<T>, optional<TT>>>, Character)>
+    delta = [n1, n1, start](pair<int, pair<optional<T>, optional<TT>>> state, Character next) 
+	{
+        vector<pair<int, pair<optional<T>, optional<TT>>>> v;
+        if (state == start && next == -1) 
 		{
-			if (state == start) 
-			{
-				return true;
-			} 
-			else if (state.first == l && state.second.first != NULL) 
-			{
-				return n1.Q(state.second.first.value());
-			} 
-			else if (state.first == r && state.second.second != NULL) 
-			{
-				return n2.Q(state.second.second.value());
-			}
-			return false;
-		};
-	
-		function<bool(pair<int, pair<optional<T>, optional<TT>>>)> F = [n1, n2](pair<int, pair<optional<T>, optional<TT>>> state) 
+			v.push_back({l, {n1.q0, NULL}});
+			v.push_back({r, {NULL, n1.q0}});
+        } 
+		else if (state.first == l && state.second.first != NULL) 
 		{
-			if (state.first == l && state.second.first != NULL) 
+			vector<T> vTemp = n1.Delta(state.second.first.value(), next);
+			for (auto i = vTemp.begin(); i != vTemp.end(); i++) 
 			{
-				return n1.F(state.second.first.value());
-			} 
-			else if (state.first == r && state.second.second != NULL) 
-			{
-				return n2.F(state.second.second.value());
+				v.push_back({l, {*i, NULL}});
 			}
-			return false;
-		};
+			if (n1.F(state.second.first.value()) && next == -1) v.push_back({r, {NULL, n1.q0}});
+        } 
+		else if (state.first == r && state.second.second != NULL) 
+		{
+			vector<TT> vTemp = n1.Delta(state.second.second.value(), next);
+			for (auto i = vTemp.begin(); i != vTemp.end(); i++) 
+			{
+				v.push_back({r, {NULL, *i}});
+			}
+			if (n1.F(state.second.second.value()) && next == -1) v.push_back({l, {n1.q0, NULL}});
+        }
+		
+        return v;
+    };
 
-		return NFA<pair<int, pair<optional<T>, optional<TT>>>>(Q, start, delta, F);
-	}
+	function<bool(pair<int, pair<optional<T>, optional<TT>>>)> Q = [n1, n1, start](pair<int, pair<optional<T>, optional<TT>>> state) 
+	{
+        if (state == start) return true;
+        if (state.first == l && state.second.first != NULL) 
+		{
+			return n1.Q(state.second.first.value());
+        }
+        if (state.first == r && state.second.second != NULL) 
+		{
+			return n1.Q(state.second.second.value());
+        }
+        return false;
+    };
 
+	function<bool(pair<int, pair<optional<T>, optional<TT>>>)> F = [n1, n1](pair<int, pair<optional<T>, optional<TT>>> state) 
+	{
+        if (state.first == l && state.second.first != NULL) 
+		{
+			return n1.F(state.second.first.value());
+        }
+        if (state.first == RIGHT && state.second.second != NULL) 
+		{
+			return n1.F(state.second.second.value());
+        }
+		
+        return false;
+    };
+
+	return NFA<pair<int, pair<optional<T>, optional<TT>>>>(Q, start, delta, F);
+}
 bool equalitytest();
 bool subsettest();
 bool intersecttest();
