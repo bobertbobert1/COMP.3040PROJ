@@ -29,9 +29,9 @@ DONE Define a data type to represent trace trees.
 DONE For each example NFA, write a half-dozen trace trees of their behavior.
 DONE (Forking) Write a function that given an NFA and a string, returns a tree of all possible traces.
 DONE For each example NFA, write a dozen tests of their behavior.
-(Backtracking) Write a function that given an NFA and a string, determines if the string is accepted.
-(Union) Write a function that takes two NFAs and returns a third NFA that accepts a string if either argument accepts it.
-(Concatenation) Write a function that takes two NFAs and returns a third NFA that accepts a string if it can be broken into two pieces, one accepted by the first NFA and the other accepted by the second.
+DONE (Backtracking) Write a function that given an NFA and a string, determines if the string is accepted.
+DONE (Union) Write a function that takes two NFAs and returns a third NFA that accepts a string if either argument accepts it.
+DONE (Concatenation) Write a function that takes two NFAs and returns a third NFA that accepts a string if it can be broken into two pieces, one accepted by the first NFA and the other accepted by the second.
 Write a dozen tests for your concatenation function.
 (Kleene Star) Write a function that takes an NFA and returns a new NFA that accepts a string if it can be broken into N pieces, each accepted by the argument.
 Write a dozen tests for your Kleene star function.
